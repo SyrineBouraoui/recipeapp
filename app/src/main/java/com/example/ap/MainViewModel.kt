@@ -23,12 +23,11 @@ sealed interface UiState<out T> {
 
 class MainViewModel : ViewModel() {
 
-    // Turns a network call into a Flow: Success or Error
     private fun <T> request(block: suspend () -> T): Flow<UiState<T>> =
         flow<UiState<T>> { emit(UiState.Success(block())) }
             .catch { emit(UiState.Error) }
 
-    // ---- Home ----
+    //home
     val categories: StateFlow<UiState<List<Category>>> =
         request { Api.categories() }
             .stateIn(viewModelScope, SharingStarted.Eagerly, UiState.Loading)
@@ -48,7 +47,7 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    // ---- Lists and details (cached so going back doesn't reload) ----
+
     private val listCache = mutableMapOf<String, StateFlow<UiState<List<MealSummary>>>>()
     private val mealCache = mutableMapOf<String, StateFlow<UiState<Meal>>>()
 
@@ -72,7 +71,7 @@ class MainViewModel : ViewModel() {
     fun meal(id: String) =
         cached(mealCache, id) { Api.meal(id) ?: error("Meal not found") }
 
-    // ---- Favorites (kept in memory) ----
+    // save data in favorite
     private val _favorites = MutableStateFlow<List<MealSummary>>(emptyList())
     val favorites: StateFlow<List<MealSummary>> = _favorites.asStateFlow()
 

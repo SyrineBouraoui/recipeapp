@@ -74,7 +74,9 @@ object Api {
     suspend fun randomMeal(): Meal? =
         parseMeal(client.get("$BASE/random.php").body())
 
-    private fun parseMeal(root: JsonObject): Meal? {
+
+
+    private fun parseMeal(root: JsonObject): Meal? { //pour transformer la réponse JSON de l’API en objet Kotlin
         val obj = (root["meals"] as? JsonArray)?.firstOrNull() as? JsonObject ?: return null
 
         fun text(key: String): String =

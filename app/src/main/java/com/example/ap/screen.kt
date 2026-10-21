@@ -68,8 +68,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import kotlinx.coroutines.flow.StateFlow
 
-// ====================== Shared pieces ======================
-
+// the stuff shared in every interface
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppScaffold(
@@ -103,7 +102,7 @@ fun Loading(modifier: Modifier = Modifier) {
     }
 }
 
-@Composable
+@Composable //indique une fonction qui construit une partie de l’interface avec Jetpack Compose
 fun ErrorBox(modifier: Modifier = Modifier) {
     Box(modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
         Text(
@@ -179,7 +178,7 @@ fun MealGrid(meals: List<MealSummary>, modifier: Modifier, onMeal: (String) -> U
 
 private val FullWidth: LazyGridItemSpanScope.() -> GridItemSpan = { GridItemSpan(maxLineSpan) }
 
-// ====================== Screen 1: Home ======================
+// home
 
 @Composable
 fun HomeScreen(
@@ -259,7 +258,7 @@ fun HomeScreen(
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                         )
-                        TextButton(onClick = { vm.rollMeal() }) { Text("🎲 Another one") }
+
                     }
                     StateView(mealOfTheDay, Modifier.fillMaxWidth().height(200.dp)) { meal ->
                         FeaturedMeal(meal) { onMeal(meal.id) }
@@ -361,7 +360,7 @@ fun FeaturedMeal(meal: Meal, onClick: () -> Unit) {
     }
 }
 
-// ====================== Screen 2: Recipe list ======================
+// scr2: recipelist
 
 @Composable
 fun MealListScreen(
@@ -385,7 +384,7 @@ fun MealListScreen(
     }
 }
 
-// ====================== Screen 3: Recipe details ======================
+// scr3:recipdetails
 
 @Composable
 fun DetailScreen(vm: MainViewModel, id: String, onBack: () -> Unit) {
@@ -477,7 +476,7 @@ fun RecipeContent(meal: Meal, modifier: Modifier, onWatch: () -> Unit) {
     }
 }
 
-// ====================== Screen 4: Favorites ======================
+// scr4:favorite
 
 @Composable
 fun FavoritesScreen(vm: MainViewModel, onBack: () -> Unit, onMeal: (String) -> Unit) {
