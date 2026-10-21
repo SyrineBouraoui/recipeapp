@@ -86,22 +86,17 @@ fun AppScaffold(
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
+                    }},
                 actions = actions,
-            )
-        },
+            )},
         content = content,
-    )
-}
-
+    )}
 @Composable
 fun Loading(modifier: Modifier = Modifier) {
     Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         CircularProgressIndicator()
     }
 }
-
 @Composable //indique une fonction qui construit une partie de l’interface avec Jetpack Compose
 fun ErrorBox(modifier: Modifier = Modifier) {
     Box(modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
@@ -111,7 +106,6 @@ fun ErrorBox(modifier: Modifier = Modifier) {
         )
     }
 }
-
 @Composable
 fun <T> StateView(
     state: UiState<T>,
@@ -140,7 +134,6 @@ fun AppCard(
         content = content,
     )
 }
-
 @Composable
 fun MealCard(meal: MealSummary, onClick: () -> Unit) {
     AppCard(onClick = onClick) {
@@ -158,10 +151,7 @@ fun MealCard(meal: MealSummary, onClick: () -> Unit) {
             fontWeight = FontWeight.SemiBold,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
-        )
-    }
-}
-
+        )}}
 @Composable
 fun MealGrid(meals: List<MealSummary>, modifier: Modifier, onMeal: (String) -> Unit) {
     LazyVerticalGrid(
@@ -173,14 +163,9 @@ fun MealGrid(meals: List<MealSummary>, modifier: Modifier, onMeal: (String) -> U
     ) {
         items(meals, key = { it.idMeal }) { meal ->
             MealCard(meal) { onMeal(meal.idMeal) }
-        }
-    }
-}
-
+        }}}
 private val FullWidth: LazyGridItemSpanScope.() -> GridItemSpan = { GridItemSpan(maxLineSpan) }
-
 // home
-
 @Composable
 fun HomeScreen(
     vm: MainViewModel,
@@ -210,25 +195,17 @@ fun HomeScreen(
                             "What's for dinner?",
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
-                        )
-
-                    }
+                        )}
                     IconButton(onClick = onFavorites) {
                         BadgedBox(
                             badge = {
                                 if (favorites.isNotEmpty()) Badge { Text("${favorites.size}") }
-                            },
-                        ) {
+                            },) {
                             Icon(
                                 Icons.Default.Favorite,
                                 contentDescription = "Favorites",
                                 tint = MaterialTheme.colorScheme.primary,
-                            )
-                        }
-                    }
-                }
-            }
-
+                            )}}}}
             // Search
             item(span = FullWidth) {
                 OutlinedTextField(
@@ -275,13 +252,7 @@ fun HomeScreen(
                             cat.strCategory,
                             modifier = Modifier.padding(start = 12.dp, end = 12.dp, bottom = 12.dp),
                             fontWeight = FontWeight.SemiBold,
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
+                        )}}}}}}
 
 @Composable
 fun FeaturedMeal(meal: Meal, onClick: () -> Unit) {
@@ -297,9 +268,7 @@ fun FeaturedMeal(meal: Meal, onClick: () -> Unit) {
                 model = meal.thumb,
                 contentDescription = meal.name,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
-
+                modifier = Modifier.fillMaxSize())
             Column(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
@@ -307,8 +276,7 @@ fun FeaturedMeal(meal: Meal, onClick: () -> Unit) {
                     .background(
                         Brush.verticalGradient(
                             listOf(Color.Transparent, Color.Black.copy(alpha = 0.7f))
-                        )
-                    )
+                        ))
                     .padding(16.dp)
             ) {
                 Text(
@@ -318,17 +286,11 @@ fun FeaturedMeal(meal: Meal, onClick: () -> Unit) {
                     style = MaterialTheme.typography.titleLarge,
                     maxLines = 2
                 )
-
                 Text(
                     text = "${meal.category} · ${meal.area}",
                     color = Color.White
-                )
-            }
-        }
-    }
-}
+                )}}}}
 // scr2: recipelist
-
 @Composable
 fun MealListScreen(
     title: String,
@@ -337,31 +299,22 @@ fun MealListScreen(
     onMeal: (String) -> Unit,
 ) {
     val state by source.collectAsState()
-
     AppScaffold(title, onBack) { padding ->
         StateView(state, Modifier.padding(padding)) { meals ->
             if (meals.isEmpty()) {
                 Box(Modifier.padding(padding).fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("No recipes found 🍽️")
-                }
+                    Text("No recipes found")}
             } else {
                 MealGrid(meals, Modifier.padding(padding), onMeal)
-            }
-        }
-    }
-}
-
+            }}}}
 // scr3:recipdetails
-
 @Composable
 fun DetailScreen(vm: MainViewModel, id: String, onBack: () -> Unit) {
     val state by vm.meal(id).collectAsState()
     val favorites by vm.favorites.collectAsState()
     val context = LocalContext.current
-
     val meal = (state as? UiState.Success)?.data
     val isFavorite = favorites.any { it.idMeal == id }
-
     AppScaffold(
         title = meal?.name ?: "Recipe",
         onBack = onBack,
@@ -371,11 +324,7 @@ fun DetailScreen(vm: MainViewModel, id: String, onBack: () -> Unit) {
                     Icon(
                         if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                         contentDescription = "Favorite",
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                }
-            }
-        },
+                        tint = MaterialTheme.colorScheme.primary,)}}},
     ) { padding ->
         StateView(state, Modifier.padding(padding)) { m ->
             RecipeContent(
@@ -383,16 +332,10 @@ fun DetailScreen(vm: MainViewModel, id: String, onBack: () -> Unit) {
                 modifier = Modifier.padding(padding),
                 onWatch = {
                     context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(m.youtube)))
-                },
-            )
-        }
-    }
-}
-
+                },)}}}
 @Composable
 fun RecipeContent(meal: Meal, modifier: Modifier, onWatch: () -> Unit) {
     val steps = meal.instructions.split("\n").map { it.trim() }.filter { it.isNotBlank() }
-
     Column(modifier.verticalScroll(rememberScrollState())) {
         AsyncImage(
             model = meal.thumb,
@@ -407,8 +350,6 @@ fun RecipeContent(meal: Meal, modifier: Modifier, onWatch: () -> Unit) {
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold,
             )
-
-
             Spacer(Modifier.height(4.dp))
             Text("Ingredients", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
             meal.ingredients.forEach { (name, measure) ->
@@ -417,7 +358,6 @@ fun RecipeContent(meal: Meal, modifier: Modifier, onWatch: () -> Unit) {
                     Text(measure, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
-
             Spacer(Modifier.height(4.dp))
             Text("Instructions", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
             steps.forEachIndexed { index, step ->
@@ -435,9 +375,7 @@ fun RecipeContent(meal: Meal, modifier: Modifier, onWatch: () -> Unit) {
         }
     }
 }
-
 // scr4:favorite
-
 @Composable
 fun FavoritesScreen(vm: MainViewModel, onBack: () -> Unit, onMeal: (String) -> Unit) {
     val favorites by vm.favorites.collectAsState()
