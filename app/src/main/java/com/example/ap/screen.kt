@@ -143,20 +143,21 @@ fun AppCard(
 
 @Composable
 fun MealCard(meal: MealSummary, onClick: () -> Unit) {
-    AppCard(onClick) {
+    AppCard(onClick = onClick) {
         AsyncImage(
             model = meal.strMealThumb,
             contentDescription = meal.strMeal,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxWidth().aspectRatio(1f),
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f)
         )
         Text(
-            meal.strMeal,
+            text = meal.strMeal,
             modifier = Modifier.padding(12.dp),
-            style = MaterialTheme.typography.titleSmall,
             fontWeight = FontWeight.SemiBold,
             maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
@@ -210,10 +211,7 @@ fun HomeScreen(
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
                         )
-                        Text(
-                            "Find a recipe, cook it, save it.",
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
+
                     }
                     IconButton(onClick = onFavorites) {
                         BadgedBox(
@@ -236,7 +234,7 @@ fun HomeScreen(
                 OutlinedTextField(
                     value = query,
                     onValueChange = { query = it },
-                    placeholder = { Text("Search a recipe (e.g. pasta)") },
+                    placeholder = { Text("choose ingredient") },
                     leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                     singleLine = true,
                     shape = RoundedCornerShape(16.dp),
@@ -246,24 +244,6 @@ fun HomeScreen(
                     ),
                     modifier = Modifier.fillMaxWidth(),
                 )
-            }
-
-            // Meal of the day
-            item(span = FullWidth) {
-                Column {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            "Meal of the day",
-                            modifier = Modifier.weight(1f),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                        )
-
-                    }
-                    StateView(mealOfTheDay, Modifier.fillMaxWidth().height(200.dp)) { meal ->
-                        FeaturedMeal(meal) { onMeal(meal.id) }
-                    }
-                }
             }
 
             // Categories
@@ -307,59 +287,46 @@ fun HomeScreen(
 fun FeaturedMeal(meal: Meal, onClick: () -> Unit) {
     Card(
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth().height(200.dp),
-        shape = RoundedCornerShape(24.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp),
+        shape = RoundedCornerShape(24.dp)
     ) {
-        Box(Modifier.fillMaxSize()) {
+        Box {
             AsyncImage(
                 model = meal.thumb,
                 contentDescription = meal.name,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize()
             )
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .padding(0.dp)
-                    .let { it }
-                    .then(Modifier),
-            )
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .then(
-                        Modifier.padding(0.dp)
-                    ),
-            ) {
-                Box(
-                    Modifier
-                        .fillMaxSize()
-                        .let { base ->
-                            base
-                        },
-                )
-            }
+
             Column(
-                Modifier
+                modifier = Modifier
                     .align(Alignment.BottomStart)
                     .fillMaxWidth()
-                    .let { it }
-                    .padding(16.dp),
+                    .background(
+                        Brush.verticalGradient(
+                            listOf(Color.Transparent, Color.Black.copy(alpha = 0.7f))
+                        )
+                    )
+                    .padding(16.dp)
             ) {
                 Text(
-                    meal.name,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
+                    text = meal.name,
                     color = Color.White,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.titleLarge,
+                    maxLines = 2
                 )
-                Text("${meal.category} · ${meal.area}", color = Color.White.copy(alpha = 0.85f))
+
+                Text(
+                    text = "${meal.category} · ${meal.area}",
+                    color = Color.White
+                )
             }
         }
     }
 }
-
 // scr2: recipelist
 
 @Composable
@@ -441,13 +408,6 @@ fun RecipeContent(meal: Meal, modifier: Modifier, onWatch: () -> Unit) {
                 fontWeight = FontWeight.SemiBold,
             )
 
-            if (meal.youtube.isNotBlank()) {
-                Button(onClick = onWatch) {
-                    Icon(Icons.Default.PlayArrow, contentDescription = null)
-                    Spacer(Modifier.width(8.dp))
-                    Text("Watch on YouTube")
-                }
-            }
 
             Spacer(Modifier.height(4.dp))
             Text("Ingredients", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
@@ -486,7 +446,7 @@ fun FavoritesScreen(vm: MainViewModel, onBack: () -> Unit, onMeal: (String) -> U
         if (favorites.isEmpty()) {
             Box(Modifier.padding(padding).fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
                 Text(
-                    "No favorites yet.\nTap the ♥ on a recipe to save it here.",
+                    "Click the ♥ on a recipe to save it here.",
                     textAlign = TextAlign.Center,
                 )
             }

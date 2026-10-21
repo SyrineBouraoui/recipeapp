@@ -48,6 +48,7 @@ class MainViewModel : ViewModel() {
     }
 
 
+
     private val listCache = mutableMapOf<String, StateFlow<UiState<List<MealSummary>>>>()
     private val mealCache = mutableMapOf<String, StateFlow<UiState<Meal>>>()
 
